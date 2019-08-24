@@ -1,0 +1,64 @@
+--위에부터 순차적으로 테이블 생성하세요.
+
+create table movie(
+    id number(10) primary key,
+    m_name  varchar2(30),
+    m_location varchar2(20),
+    max_people number(10),
+    running_time number(3)
+    );
+    
+create table run_time(
+    movie_id    number(10),
+    start_time    number(10),
+    constraint m_id foreign key(movie_id)
+    references movie(id) ON DELETE CASCADE
+);
+
+create table ticket(
+    t_id    number(10) primary key,
+    phone   varchar2(20),
+    num_of_people number(10),
+    charge  number(10),
+    m_id    number(10),
+    constraint t_m_id foreign key (m_id)
+    references movie(id) ON DELETE CASCADE
+    );
+    
+create table seat(
+    t_id    number(10),
+    seat_num    varchar2(3),
+    m_location  varchar2(20),
+    day         date,
+    time        number(10),
+    seated      varchar(2),
+    constraint s_t_id foreign key(t_id)
+    references ticket(t_id) ON DELETE CASCADE
+    );
+
+create table pay(
+    order_id    number(10)  primary key,
+    t_id        number(10),
+    charge      number(15),
+    constraint fk_pay_t_id foreign key (t_id)
+    references ticket(t_id) ON DELETE CASCADE
+);
+
+create table snack(
+    snack_id    number(10) primary key,
+    name        varchar2(20),
+    charge      number(10)
+);
+
+create table snack_order(
+   order_id     number(10),
+   snack_id     number(10),
+   amount       number(5),
+   charge       number(10),
+   constraint fk_snack_order_id foreign key (order_id)
+   references pay(order_id) ON DELETE CASCADE,
+   constraint fk_snack_snack_id foreign key (snack_id)
+   references snack(snack_id)ON DELETE CASCADE
+);
+
+    
